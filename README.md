@@ -1,6 +1,7 @@
 # ResponsiveService
 
-TODO: Write a gem description
+The ResponsiveService gem is at this point little more than a light wrapper on a suggested pattern
+for implementing service classes.
 
 ## Installation
 
@@ -18,7 +19,39 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Create a service class, either your own or feel free to subclass from `ResponsiveService::ResponsiveService`.
+
+```ruby
+class MyService < ResponsiveService::ResponsiveService
+  def call(&block)
+    # do some work
+    yield ResponsiveService::Responder.new(:success)
+  end
+end
+```
+
+You must implement a `call` method if you subclass `ResponsiveService::ResponsiveService`.
+Your call method should yield with a `ResponsiveService::Responder`.
+
+A `ResponsiveService::Responder` can take up to 3 arguments but must at least have the first argument which is the type of the response. In addition it can take a message and a context. The message by convention should
+be a string but there are no restrictions. The context can be any object.
+
+```ruby
+responder = Responder.new(:success, 'You win!', {an_important_value: 'some value'})
+responder.type    # :success
+responder.message # 'You win!'
+resonder.context  # {an_important_value: 'some value'}
+```
+
+Your service can now be used as such:
+
+```ruby
+service = MyService.new
+service.call do |response|
+  response.success { puts 'I was successful.' }
+  response.failure { puts 'I failed.' }
+end
+```
 
 ## Contributing
 
