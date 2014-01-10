@@ -40,7 +40,7 @@ be a string but there are no restrictions. The context can be any object.
 responder = Responder.new(:success, 'You win!', {an_important_value: 'some value'})
 responder.type    # :success
 responder.message # 'You win!'
-resonder.context  # {an_important_value: 'some value'}
+responder.context  # {an_important_value: 'some value'}
 ```
 
 Your service can now be used as such:
