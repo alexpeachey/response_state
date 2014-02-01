@@ -2,8 +2,8 @@ module ResponsiveService
   class ResponsiveService
     attr_reader :responder_factory
 
-    def initialize(responder_factory=ResponsiveService::Responder)
-      @responder_factory = responder_factory
+    def initialize(dependencies={})
+      @responder_factory = dependencies.fetch(:responder_factory, Responder)
     end
 
     def call(&block)

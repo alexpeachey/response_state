@@ -2,7 +2,8 @@ require 'spec_helper'
 
 module ResponsiveService
   describe ResponsiveService do
-    subject(:service) { ResponsiveService.new(responder_factory) }
+    subject(:service) { ResponsiveService.new(dependencies) }
+    let(:dependencies) { { responder_factory: responder_factory } }
     let(:responder_factory) { double :responder_factory, new: nil }
     let(:responder) { double :responder }
 
