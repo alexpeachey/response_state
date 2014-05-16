@@ -7,10 +7,10 @@ Gem::Specification.new do |spec|
   spec.name          = 'responsive_service'
   spec.version       = ResponsiveService::VERSION
   spec.authors       = ['alexpeachey']
-  spec.email         = ['alex.peachey@gmail.com']
-  spec.description   = 'Easy to use responsive service pattern'
-  spec.summary       = 'Easy to use responsive service pattern'
-  spec.homepage      = 'http://github.com/alexpeachey/responsive_service'
+  spec.email         = ['alex.peachey@originate.com']
+  spec.description   = 'Easy to use response state pattern'
+  spec.summary       = 'Easy to use response state pattern'
+  spec.homepage      = 'http://github.com/Originate/response_state'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
