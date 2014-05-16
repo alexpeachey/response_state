@@ -1,13 +1,12 @@
-# ResponsiveService
+# Response State
 
-The ResponsiveService gem is at this point little more than a light wrapper on a suggested pattern
-for implementing service classes.
+The Response State gem is an implementation of the Response State pattern by @brianvh
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'responsive_service'
+    gem 'response_state'
 
 And then execute:
 
@@ -15,29 +14,33 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install responsive_service
+    $ gem install response_state
 
 ## Usage
 
-### ResponsiveService
+### ResponseState::Service
 
-Create a service class, either your own or feel free to subclass from `ResponsiveService::ResponsiveService`.
+Create a service class and subclass ResponseState::Service.
 
 ```ruby
-class MyService < ResponsiveService::ResponsiveService
+class MyService < ResponseState::Service
+  def initialize(param)
+    @param = param
+  end
+
   def call(&block)
     # do some work
-    yield ResponsiveService::Response.new(:success)
+    yield ResponseState::Response.new(:success)
   end
 end
 ```
 
-You must implement a `call` method if you subclass `ResponsiveService::ResponsiveService`.
-Your call method should yield with a `ResponsiveService::Response`.
+You must implement a `call` method.
+Your call method should yield with a `ResponseState::Response`.
 
 ### Response
 
-A `ResponsiveService::Response` can take up to 4 arguments but must at least have the first argument which is the type of the response. In addition it can take a message, a context, and a set of valid states. The message by convention should
+A `ResponseState::Response` can take up to 4 arguments but must at least have the first argument which is the state of the response. In addition it can take a message, a context, and a set of valid states. The message by convention should
 be a string but there are no restrictions. The context can be any object. The valid states should be an array of symbols
 that are the allowed states. An exception will be thrown if initialized with a type of response that is not in the valid states if a set of valid states was specified.
 
@@ -58,10 +61,12 @@ response.foo { puts 'Not going to work' }
 # exception => NoMethodError: undefined method `foo'
 ```
 
-You can also choose to subclass `ResponsiveService::Response` and define valid states for all instances of that class.
+You can also choose to subclass `ResponseState::Response` and define valid states for all instances of that class.
+If you want to only allow certain states, this is the prefered method,
+rather than passing the 4th argument in the construction of the object.
 
 ```ruby
-class MyResponse < ResponsiveService::Response
+class MyResponse < ResponseState::Response
   valid_states :success, :failure
 end
 
@@ -77,8 +82,7 @@ response.foo { puts 'Not going to work' }
 Your service can now be used as such:
 
 ```ruby
-service = MyService.new
-service.call do |response|
+MyService.('Some param') do |response|
   response.success { puts 'I was successful.' }
   response.failure { puts 'I failed.' }
 end

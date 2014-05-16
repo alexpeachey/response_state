@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'responsive_service/version'
+require 'response_state/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'responsive_service'
-  spec.version       = ResponsiveService::VERSION
+  spec.name          = 'response_state'
+  spec.version       = ResponseState::VERSION
   spec.authors       = ['alexpeachey']
   spec.email         = ['alex.peachey@originate.com']
   spec.description   = 'Easy to use response state pattern'

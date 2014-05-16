@@ -11,7 +11,7 @@ SimpleCov.start do
 end
 
 require 'rspec'
-require 'responsive_service'
+require 'response_state'
 
 RSpec.configure do |config|
   config.mock_with :rspec
