@@ -39,6 +39,21 @@ You must implement a `call` method.
 Your call method should yield with a `ResponseState::Response`.
 The response can be generated with a helper method `send_state` in your service class.
 
+You can optionally declare and restrict the set of valid states for your service's responses.
+The service will use this set of states when generating the response with the `send_state` method.
+
+```ruby
+class MyService < ResponseState::Service
+  response_states :success, :failure
+
+  def call(&block)
+    # do some work
+    yield send_state(:success)
+  end
+end
+```
+
+
 ### Response
 
 A `ResponseState::Response` can take up to 4 arguments but must at least have the first argument which is the state of the response. In addition it can take a message, a context, and a set of valid states. The message by convention should
@@ -86,6 +101,19 @@ Your service can now be used as such:
 MyService.('Some param') do |response|
   response.success { puts 'I was successful.' }
   response.failure { puts 'I failed.' }
+end
+```
+
+If your service or the response itself restrict the response to a specific set
+of states, you can ensure all states have been handled by placing a call
+to `unhandled_states` at the end of your response block. This will yield an array of
+unhandled states to the given block if there are any unhandled states.
+
+```ruby
+MyService.('Some param') do |response|
+  response.success { puts 'I was successful.' }
+  response.failure { puts 'I failed.' }
+  response.unhandled_states { |states| raise "You didn't handle #{states.join(', ')}" }
 end
 ```
 
