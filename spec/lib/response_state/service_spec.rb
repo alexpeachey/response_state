@@ -4,11 +4,27 @@ require 'ostruct'
 module ResponseState
   describe Service do
     subject(:service) { Service.new }
-    before { Response.instance_variable_set :@class_valid_states, nil }
+    before do
+      Response.instance_variable_set :@class_valid_states, nil
+      Service.instance_variable_set :@valid_states, nil
+    end
 
     describe '.call' do
       it 'news up an instance and passes the block on to #call' do
         expect { |b| Service.(&b) }.to yield_control
+      end
+    end
+
+    describe '.response_states' do
+      it 'sets the valid response states' do
+        Service.response_states :success, :failure
+        expect(Service.valid_states).to eq [:success, :failure]
+      end
+    end
+
+    describe '.valid_states' do
+      it 'defaults to []' do
+        expect(Service.valid_states).to eq []
       end
     end
 
@@ -64,6 +80,14 @@ module ResponseState
 
         it 'has valid_states nil' do
           expect(response.valid_states).to eq []
+        end
+
+        context 'and the service has valid states set' do
+          before { Service.response_states :success, :failure }
+
+          it 'has valid_states [:success, :failure]' do
+            expect(response.valid_states).to eq [:success, :failure]
+          end
         end
       end
 

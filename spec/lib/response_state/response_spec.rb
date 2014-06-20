@@ -48,7 +48,7 @@ module ResponseState
 
           context 'when initialized with an invalid state' do
             let(:state) { :foo }
-            
+
             it 'raises an exception' do
               expect { response }.to raise_exception('Invalid state of response: foo')
             end
@@ -79,7 +79,7 @@ module ResponseState
 
         context 'when initialized with an invalid state' do
           subject(:response) { Response.new(:foo) }
-          
+
           it 'raises an exception' do
             expect { response }.to raise_exception('Invalid state of response: foo')
           end
@@ -90,6 +90,29 @@ module ResponseState
 
           it 'reflects the valid_states' do
             expect(response.valid_states).to eq [:success, :failure]
+          end
+        end
+
+        describe '#unhandled_states' do
+          subject(:response) { Response.new(:success) }
+
+          context 'when only one state is called' do
+            before { response.success {} }
+
+            it 'yields' do
+              expect { |b| response.unhandled_states(&b) }.to yield_with_args([:failure])
+            end
+          end
+
+          context 'when all states are called' do
+            before do
+              response.success {}
+              response.failure {}
+            end
+
+            it 'does not yield' do
+              expect { |b| response.unhandled_states(&b) }.not_to yield_control
+            end
           end
         end
       end
