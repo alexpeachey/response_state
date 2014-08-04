@@ -11,7 +11,7 @@ module ResponseState
 
     describe '.call' do
       it 'news up an instance and passes the block on to #call' do
-        expect { |b| Service.(&b) }.to yield_control
+        expect { |b| Service.(&b) }.to raise_error(NotImplementedError, "A ResponseState::Service should implement the call method.\nThe call method should perform the relevant work of the service and yield a ResponseState::Response object.\n")
       end
     end
 
@@ -29,16 +29,8 @@ module ResponseState
     end
 
     describe '#call' do
-      let(:yielded) { OpenStruct.new(response: nil) }
-      let(:response) { yielded.response }
-      before { service.call { |response| yielded.response = response} }
-
-      it 'yields an unimplemented response' do
-        expect(response.state).to eq :unimplemented
-      end
-
-      it 'yields with a response indicating instructions' do
-        expect(response.message).to eq "A ResponseState::Service should implement the call method.\nThe call method should perform the relevant work of the service and yield a ResponseState::Response object.\n"
+      it 'raises an error' do
+        expect { service.call }.to raise_error(NotImplementedError, "A ResponseState::Service should implement the call method.\nThe call method should perform the relevant work of the service and yield a ResponseState::Response object.\n")
       end
     end
 
@@ -65,6 +57,7 @@ module ResponseState
 
       context 'given :success, "a message", {}' do
         let(:response) { service.send_state(:success, 'a message', {}) }
+        before { Service.response_states :success, :failure }
 
         it 'has a success state' do
           expect(response.state).to eq :success
@@ -79,20 +72,13 @@ module ResponseState
         end
 
         it 'has valid_states nil' do
-          expect(response.valid_states).to eq []
-        end
-
-        context 'and the service has valid states set' do
-          before { Service.response_states :success, :failure }
-
-          it 'has valid_states [:success, :failure]' do
-            expect(response.valid_states).to eq [:success, :failure]
-          end
+          expect(response.valid_states).to eq [:success, :failure]
         end
       end
 
       context 'given :success, "a message"' do
         let(:response) { service.send_state(:success, 'a message') }
+        before { Service.response_states :success, :failure }
 
         it 'has a success state' do
           expect(response.state).to eq :success
@@ -107,12 +93,13 @@ module ResponseState
         end
 
         it 'has valid_states nil' do
-          expect(response.valid_states).to eq []
+          expect(response.valid_states).to eq [:success, :failure]
         end
       end
 
       context 'given :success' do
         let(:response) { service.send_state(:success) }
+        before { Service.response_states :success, :failure }
 
         it 'has a success state' do
           expect(response.state).to eq :success
@@ -127,7 +114,7 @@ module ResponseState
         end
 
         it 'has valid_states nil' do
-          expect(response.valid_states).to eq []
+          expect(response.valid_states).to eq [:success, :failure]
         end
       end
     end
