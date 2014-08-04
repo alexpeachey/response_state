@@ -1,10 +1,8 @@
 require 'spec_helper'
-
-class MyResponse < ResponseState::Response
-  valid_states :success, :failure
-end
+require 'ostruct'
 
 class MyService < ResponseState::Service
+  response_states :success, :failure
   attr_reader :object, :pass
 
   def initialize(object, pass)
@@ -20,11 +18,11 @@ class MyService < ResponseState::Service
 
   def success_response
     return unless pass
-    MyResponse.new(:success, 'Yay! It works.', object)
+    send_state :success, 'Yay! It works.', object
   end
 
   def failure_response
-    MyResponse.new(:failure, 'Boo! It failed.')
+    send_state :failure, 'Boo! It failed.'
   end
 end
 

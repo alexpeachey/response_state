@@ -2,8 +2,11 @@ require 'spec_helper'
 
 module ResponseState
   describe Response do
-    subject(:response) { Response.new(state) }
+    subject(:response) { Response.new(state, message, context, valid_states) }
     let(:state) { :success }
+    let(:message) { nil }
+    let(:context) { nil }
+    let(:valid_states) { [:success, :failure] }
     before { Response.instance_variable_set :@class_valid_states, nil }
 
     it 'yields when sent :success with a state of :success' do
@@ -15,19 +18,16 @@ module ResponseState
     end
 
     context 'when initialized with a message' do
-      subject(:response) { Response.new(state, message) }
       let(:message) { double(:message) }
 
       specify { expect(response.message).to eq message }
 
       context 'when additionally initialized with a context' do
-        subject(:response) { Response.new(state, message, context) }
         let(:context) { double(:context) }
 
         specify { expect(response.context).to eq context }
 
         context 'when additionally initiaized with a set of valid states' do
-          subject(:response) { Response.new(state, message, context, valid_states) }
           let(:valid_states) { [:success, :failure] }
 
           it 'yields when sent :success with a state of :success' do
@@ -59,6 +59,7 @@ module ResponseState
 
     describe '.valid_states' do
       context 'when set to an array of states' do
+        let(:valid_states) { nil }
         before { Response.valid_states(:success, :failure) }
 
         context 'when the response state is :success' do
