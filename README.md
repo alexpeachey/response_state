@@ -24,8 +24,6 @@ Create a service class and subclass ResponseState::Service.
 
 ```ruby
 class MyService < ResponseState::Service
-  response_states :success, :failure
-
   def initialize(param)
     @param = param
   end
@@ -37,8 +35,7 @@ class MyService < ResponseState::Service
 end
 ```
 
-You must implement a `call` method. You must also indicated the valid response states
-using the `response_states` class macro method.
+You must implement a `call` method.
 
 Your call method should yield with a call to `send_state` which will create a `ResponseState::Response`.
 
@@ -46,6 +43,16 @@ The `send_state` method takes at a minimum a symbol representing the state. It o
 take a message and a context. The message by convention should be a string but there are no restrictions.
 The context can be any object. An error will be raised if a state is specified that is not in the list
 of valid response states.
+
+The valid response states default to `[:success, :failure]`.
+You can override the valid response states for a class using the `response_states` class macro method.
+
+```ruby
+class MyOtherService < ResponseState::Service
+  response_states :done, :error
+  # ...
+end
+```
 
 ### Your service API
 

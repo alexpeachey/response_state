@@ -6,7 +6,7 @@ module ResponseState
     end
 
     def self.valid_states
-      @valid_states || []
+      @valid_states || [:success, :failure]
     end
 
     def self.call(*args, &block)
