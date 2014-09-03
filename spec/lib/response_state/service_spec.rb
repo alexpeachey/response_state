@@ -35,26 +35,6 @@ module ResponseState
     end
 
     describe '#send_state' do
-      context 'given :success, "a message", {}, [:success, :failure]' do
-        let(:response) { service.send_state(:success, 'a message', {}, [:success, :failure]) }
-
-        it 'has a success state' do
-          expect(response.state).to eq :success
-        end
-
-        it 'has the message "a message"' do
-          expect(response.message).to eq 'a message'
-        end
-
-        it 'has the context {}' do
-          expect(response.context).to eq Hash.new
-        end
-
-        it 'has valid_states [:success, :failure]' do
-          expect(response.valid_states).to eq [:success, :failure]
-        end
-      end
-
       context 'given :success, "a message", {}' do
         let(:response) { service.send_state(:success, 'a message', {}) }
         before { Service.response_states :success, :failure }

@@ -17,9 +17,8 @@ module ResponseState
       fail NotImplementedError, "A ResponseState::Service should implement the call method.\nThe call method should perform the relevant work of the service and yield a ResponseState::Response object.\n"
     end
 
-    def send_state(state, message=nil, context=nil, valid_states=nil)
-      valid_states ||= self.class.valid_states
-      ResponseState::Response.new(state, message, context, valid_states)
+    def send_state(state, message=nil, context=nil)
+      ResponseState::Response.new(state, message, context, self.class.valid_states)
     end
   end
 end
