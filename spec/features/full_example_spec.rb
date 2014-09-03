@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'ostruct'
 
 class MyService < ResponseState::Service
-  response_states :success, :failure
   attr_reader :object, :pass
 
   def initialize(object, pass)

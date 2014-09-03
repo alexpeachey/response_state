@@ -15,16 +15,16 @@ module ResponseState
       end
     end
 
-    describe '.response_states' do
-      it 'sets the valid response states' do
-        Service.response_states :success, :failure
+    describe '.valid_states' do
+      it 'defaults to [:success, :failure]' do
         expect(Service.valid_states).to eq [:success, :failure]
       end
     end
 
-    describe '.valid_states' do
-      it 'defaults to []' do
-        expect(Service.valid_states).to eq []
+    describe '.response_states' do
+      it 'sets the valid response states' do
+        Service.response_states :success, :error
+        expect(Service.valid_states).to eq [:success, :error]
       end
     end
 
@@ -37,7 +37,6 @@ module ResponseState
     describe '#send_state' do
       context 'given :success, "a message", {}' do
         let(:response) { service.send_state(:success, 'a message', {}) }
-        before { Service.response_states :success, :failure }
 
         it 'has a success state' do
           expect(response.state).to eq :success
@@ -58,7 +57,6 @@ module ResponseState
 
       context 'given :success, "a message"' do
         let(:response) { service.send_state(:success, 'a message') }
-        before { Service.response_states :success, :failure }
 
         it 'has a success state' do
           expect(response.state).to eq :success
@@ -79,7 +77,6 @@ module ResponseState
 
       context 'given :success' do
         let(:response) { service.send_state(:success) }
-        before { Service.response_states :success, :failure }
 
         it 'has a success state' do
           expect(response.state).to eq :success
