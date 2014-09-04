@@ -30,14 +30,14 @@ class MyService < ResponseState::Service
 
   def call(&block)
     # do some work
-    yield send_state :success
+    send_state :success
   end
 end
 ```
 
 You must implement a `call` method.
 
-Your call method should yield with a call to `send_state` which will create a `ResponseState::Response`.
+Your call method should return a call to `send_state` which will create a `ResponseState::Response`.
 
 The `send_state` method takes at a minimum a symbol representing the state. It optionally can also
 take a message and a context. The message by convention should be a string but there are no restrictions.
