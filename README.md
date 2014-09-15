@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/Originate/response_state.svg)](https://travis-ci.org/Originate/response_state)
+[![Code Climate](https://codeclimate.com/github/Originate/response_state/badges/gpa.svg)](https://codeclimate.com/github/Originate/response_state)
 
 # Response State
 
