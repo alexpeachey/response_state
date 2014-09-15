@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Originate/response_state.svg)](https://travis-ci.org/Originate/response_state)
+
 # Response State
 
 The Response State gem is an implementation of the Response State pattern by @brianvh
