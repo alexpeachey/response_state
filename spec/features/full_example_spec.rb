@@ -10,7 +10,7 @@ class MyService < ResponseState::Service
   end
 
   def call
-    yield (success_response or failure_response)
+    success_response or failure_response
   end
 
   private

@@ -10,8 +10,15 @@ module ResponseState
     end
 
     describe '.call' do
-      it 'news up an instance and passes the block on to #call' do
-        expect { |b| Service.(&b) }.to raise_error(NotImplementedError, "A ResponseState::Service should implement the call method.\nThe call method should perform the relevant work of the service and yield a ResponseState::Response object.\n")
+      let(:response) { double :response }
+
+      before do
+        allow(Service).to receive(:new).and_return(service)
+        allow(service).to receive(:call).and_return(response)
+      end
+
+      it 'news up an instance and passes the result of #call to the block' do
+        expect { |b| Service.(&b) }.to yield_with_args(response)
       end
     end
 
@@ -30,7 +37,7 @@ module ResponseState
 
     describe '#call' do
       it 'raises an error' do
-        expect { service.call }.to raise_error(NotImplementedError, "A ResponseState::Service should implement the call method.\nThe call method should perform the relevant work of the service and yield a ResponseState::Response object.\n")
+        expect { service.call }.to raise_error(NotImplementedError, "A ResponseState::Service should implement the call method.\nThe call method should perform the relevant work of the service and return a ResponseState::Response object.\n")
       end
     end
 
