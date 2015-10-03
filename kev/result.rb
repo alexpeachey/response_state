@@ -1,17 +1,21 @@
+# A ResponseState result.
 class Result
+
+  # :learning = the caller registers the callbacks to handle the different
+  #             result types
+  # :frozen = the callee calls the callbacks registered by the caller
+  #           to provide a result
   attr_accessor :status
 
   def initialize
     @status = :learning
   end
 
-  # Learns about the response states
-  # that the caller has subscribed to.
   def self.init
-    result = Result.new
-    yield result
-    result.status = :frozen
-    result
+    Result.new.tap do |result|
+      yield result
+      result.status = :frozen
+    end
   end
 
   def method_missing name, *args, &block

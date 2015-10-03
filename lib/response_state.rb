@@ -1,6 +1,22 @@
-require 'response_state/version'
-require 'response_state/response'
-require 'response_state/service'
+class ResponseState
+  attr_accessor :status
 
-module ResponseState
+  def initialize
+    @status = :learning
+  end
+
+  def self.init
+    ResponseState.new.tap do |result|
+      yield result
+      result.status = :frozen
+    end
+  end
+
+  def method_missing name, *args, &block
+    if @status == :learning
+      (class << self; self; end).class_eval do
+        define_method name, &block
+      end
+    end
+  end
 end
