@@ -9,7 +9,7 @@ class Result
 
   # Learns about the response states
   # that the caller has subscribed to.
-  def self.parse
+  def self.init
     result = Result.new
     yield result
     result.status = :frozen

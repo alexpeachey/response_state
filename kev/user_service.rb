@@ -6,7 +6,7 @@ class UserService
   # Creates a new user.
   # Returns a Result
   def self.create params, &block
-    result = Result.parse(&block)
+    result = Result.init(&block)
     if params == 1
       result.success
     elsif params == 2
