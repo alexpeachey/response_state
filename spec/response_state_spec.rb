@@ -8,7 +8,7 @@ describe ResponseState do
     before do
       def tester param, &block
         result = ResponseState.init(&block)
-        param.times { result.success }
+        param.times { result.success param.to_s }
       end
     end
 
@@ -19,6 +19,12 @@ describe ResponseState do
         result.failure { fail }
       end
       expect(called).to be true
+    end
+
+    it 'allows to provide data payload to the response handler' do
+      tester 1 do |result|
+        result.success { |data| expect(data).to eq '1' }
+      end
     end
 
     it 'can call state handlers multiple times' do

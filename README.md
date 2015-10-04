@@ -6,6 +6,7 @@
 
 The Response State gem is an implementation of the Response State pattern by @brianvh
 
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -20,7 +21,23 @@ Or install it yourself as:
 
     $ gem install response_state
 
+
+## About
+This Gem provides a pattern that allows more facetted function results
+than what is possible with simple return values.
+
+In particular, functions can
+
+ResponseState pattern provides a mechanism for
+in more facetted ways that simple return values, and for clients to handle
+these face
+
 ## Usage
+
+Any Ruby function/method can use this Gem to return responses that are more
+facetted that simple values.
+
+
 
 ### ResponseState::Service
 
