@@ -4,10 +4,10 @@ class ResponseState
   # :registration = callers of the method using this class subscribe to results
   # :provisioning = the method using this class defines its result(s).
   attr_accessor :status
+  attr_accessor :allowed_states
 
-
-  def self.init
-    ResponseState.new.tap do |result|
+  def self.init allowed_states: nil
+    ResponseState.new(allowed_states).tap do |result|
       yield result
       result.status = :frozen
     end
