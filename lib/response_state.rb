@@ -10,14 +10,16 @@ class ResponseState
   end
 
 
-  def method_missing name, *args, &block
-    if @status == :registration
-      define_instance_method name, &block
+private
+
+  # Adds a method with the given name and body only to the current instance,
+  # not the class itself.
+  def define_instance_method name, &block
+    (class << self; self; end).class_eval do
+      define_method name, &block
     end
   end
 
-
-private
 
   def initialize allowed_states
     @status = :registration
@@ -25,11 +27,12 @@ private
   end
 
 
-  # Adds a method with the given name and body only to the current instance,
-  # not the class itself.
-  def define_instance_method name, &block
-    (class << self; self; end).class_eval do
-      define_method name, &block
+  def method_missing name, *args, &block
+    if @status == :registration
+      # if @allowed_states && !allowed_states.include?(name)
+      #   raise "Unknown state: #{name}"
+      # end
+      define_instance_method name, &block
     end
   end
 
