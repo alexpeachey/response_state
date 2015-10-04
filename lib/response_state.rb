@@ -33,11 +33,16 @@ private
 
 
   def method_missing name, *args, &block
+    verify_is_known_state name
     if @status == :registration
-      # if @allowed_states && !allowed_states.include?(name)
-      #   raise "Unknown state: #{name}"
-      # end
       define_instance_method name, &block
+    end
+  end
+
+
+  def verify_is_known_state state
+    if @allowed_states && !@allowed_states.include?(state)
+      raise "Unknown state: #{state}"
     end
   end
 
