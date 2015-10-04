@@ -9,14 +9,7 @@ describe ResponseState do
     before do
       def tester param, &block
         result = ResponseState.init(&block)
-        if param == 1
-          result.success
-        elsif param == 2
-          result.success
-          result.success
-        else
-          result.failure
-        end
+        param.times { result.success }
       end
     end
 
@@ -31,22 +24,22 @@ describe ResponseState do
 
     it 'can call state handlers multiple times' do
       call_count = 0
-      tester 2 do |result|
+      tester 3 do |result|
         result.success   { call_count += 1 }
         result.failure { fail }
       end
-      expect(call_count).to eq 2
+      expect(call_count).to eq 3
     end
 
     it 'tolerates not subscribing to some states that are returned' do
       tester 1 do |result|
-        result.zonk   {fail }
+        result.failure { fail }
       end
     end
 
     it 'tolerates subscribing to a non-existing state' do
       tester 1 do |result|
-        result.zonk   {fail }
+        result.zonk { fail }
       end
     end
   end
