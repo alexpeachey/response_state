@@ -1,9 +1,6 @@
 class ResponseState
   attr_accessor :status
 
-  def initialize
-    @status = :registration
-  end
 
   def self.init
     ResponseState.new.tap do |result|
@@ -24,4 +21,13 @@ class ResponseState
       define_instance_method name, &block
     end
   end
+
+
+private
+
+  def initialize allowed_states
+    @status = :registration
+    @allowed_states = allowed_states
+  end
+
 end
