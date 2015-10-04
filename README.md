@@ -23,15 +23,14 @@ Or install it yourself as:
 
 
 ## About
-The ResponseState pattern models more facetted method results
-than the currently used simple return values.
+The ResponseState pattern allows modeling and efficient interaction with
+well structured outcomes of service calls.
 
-In particular, ResponseState results represent
-the different possible outcomes of the method's algorithm,
-each one with its own type of data payload.
-
-As an example, here is how readable a service that transfers funds between accounts
-can be consumed using the ResponseState pattern:
+As an example, an attempt to transfer funds between accounts
+can succeed or fail in a variety of ways.
+Each situation has to be dealt with individually.
+Here is how efficient this situation can be modeled using the ResponseState
+pattern provided by this Gem:
 
 ```ruby
 AccountServices.transferFunds from: 'Checking', to: 'Savings', amount: 100 do |result|
@@ -39,7 +38,7 @@ AccountServices.transferFunds from: 'Checking', to: 'Savings', amount: 100 do |r
   result.pending { puts 'transfer pending user approval' }
   result.limit_exceeded { puts 'daily transaction limit exceeded' }
   result.insufficient_funds { puts 'not enough funds' }
-  result.unknown_account { |account_name| puts "unknown account given: #{account_name}" }
+  result.unknown_account { |account_name| puts "unknown account: #{account_name}" }
   result.unauthorized { puts 'please log in first' }
   result.other { |error| puts "Something went wrong: #{error.message}" }
 end
@@ -48,10 +47,10 @@ end
 
 ## Usage
 
-In order to return a ResponseState response from your method or function,
-simply instantiate a ResponseState instance using `ResponseState.init`
-with the block given to your method, then call the method that represents
-the response you wish to return on it.
+In order to return a ResponseState response from your method or function:
+* create a ResponseState instance and let it parse the subscriptions of your callers
+* call the method that represents the response you wish to return
+  on your ResponseState instance
 
 
 ```ruby
@@ -67,18 +66,18 @@ def transferFunds from:, to:, amount:
 end
 ```
 
-You can return multiple results, or the same result multiple times,
+You can call result methods multiple times,
 thereby allowing streaming responses.
 
-By default, ResponseState allows subscription to and definition of any result.
-If you want to verify that only valid outcomes are subscribed to and returned
-by your method, you can provide a list of valid outcomes to the `init` method,
-like so:
+## Validations
+
+By default, ResponseState allows subscription to and definition of any result,
+and leaves it up to your integration tests to verify correct code behavior.
+
+You can provide a list of valid outcomes to the `init` method to make
+ResponseState throw exceptions if an unknown state is subscribed to or provided:
 
 ```ruby
   result = ResponseState.init(allowed_states: [:success, :pending, :limit_exceeded],
                               &block)
 ```
-
-The ResponseState instance then throws exceptions if cliens subscribe to an
-unknown response type, or if the method tries to return an unknown response type.
