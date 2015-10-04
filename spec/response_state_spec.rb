@@ -93,17 +93,16 @@ describe ResponseState do
     end
 
     it 'allows to provide data payload to callbacks' do
-      # Note:  is not available in the block.
-      payloads = []
+      # Note: RSpec methods like expect are not available in the block,
+      #       hence we cache them in local variables here.
+      _expect = method(:expect)
+      _eq = method(:eq)
       tester do |response|
         response.success do |payload1, payload2|
-          RSpec::expect(payload1).to eq 'argument 1'
-          payloads[0] = payload1
-          payloads[1] = payload2
+          _expect.call(payload1).to _eq.call 'argument 1'
+          _expect.call(payload2).to _eq.call 'argument 2'
         end
       end
-      expect(payloads[0]).to eq 'argument 1'
-      expect(payloads[1]).to eq 'argument 2'
     end
   end
 end
