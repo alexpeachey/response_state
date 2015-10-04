@@ -1,7 +1,8 @@
+require 'rspec'
+require 'response_state'
 require 'simplecov'
 
 SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
-
 SimpleCov.start do
   command_name     'spec'
   add_filter       'config/'
@@ -9,10 +10,6 @@ SimpleCov.start do
   add_filter       '.bundle'
   minimum_coverage 100
 end
-
-
-require 'rspec'
-require 'response_state'
 
 RSpec.configure do |config|
   config.mock_with :rspec
