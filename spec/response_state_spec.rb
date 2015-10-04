@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 
-
 describe ResponseState do
 
   context 'without allowed states specified' do
@@ -42,6 +41,7 @@ describe ResponseState do
         result.zonk { fail }
       end
     end
+
   end
 
 
