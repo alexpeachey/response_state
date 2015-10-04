@@ -1,4 +1,9 @@
 class ResponseState
+
+  # Possible states:
+  # :client_registration = the clients of the method using this class
+  #                        subscribe to results.
+  # :server_result = the method using this class defines its result(s).
   attr_accessor :status
 
 
