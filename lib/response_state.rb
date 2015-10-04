@@ -12,11 +12,16 @@ class ResponseState
     end
   end
 
+  def define_instance_method name, &block
+    (class << self; self; end).class_eval do
+      define_method name, &block
+    end
+  end
+
+
   def method_missing name, *args, &block
     if @status == :learning
-      (class << self; self; end).class_eval do
-        define_method name, &block
-      end
+      define_instance_method name, &block
     end
   end
 end
