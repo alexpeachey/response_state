@@ -2,7 +2,7 @@ class ResponseState
   attr_accessor :status
 
   def initialize
-    @status = :learning
+    @status = :registration
   end
 
   def self.init
@@ -20,7 +20,7 @@ class ResponseState
 
 
   def method_missing name, *args, &block
-    if @status == :learning
+    if @status == :registration
       define_instance_method name, &block
     end
   end
