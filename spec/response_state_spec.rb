@@ -7,7 +7,7 @@ describe ResponseState do
   context 'without allowed states specified' do
 
     before do
-      def create_user param, &block
+      def tester param, &block
         result = ResponseState.init(&block)
         if param == 1
           result.success
@@ -22,7 +22,7 @@ describe ResponseState do
 
     it 'calls the state handler for the given response' do
       called = false
-      create_user 1 do |result|
+      tester 1 do |result|
         result.success   { called = true }
         result.failure { fail }
       end
@@ -31,7 +31,7 @@ describe ResponseState do
 
     it 'can call state handlers multiple times' do
       call_count = 0
-      create_user 2 do |result|
+      tester 2 do |result|
         result.success   { call_count += 1 }
         result.failure { fail }
       end
@@ -39,13 +39,13 @@ describe ResponseState do
     end
 
     it 'tolerates not subscribing to some states that are returned' do
-      create_user 1 do |result|
+      tester 1 do |result|
         result.zonk   {fail }
       end
     end
 
     it 'tolerates subscribing to a non-existing state' do
-      create_user 1 do |result|
+      tester 1 do |result|
         result.zonk   {fail }
       end
     end
